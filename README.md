@@ -1,97 +1,64 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+This repository demonstrates a simple Continuous Integration (CI) pipeline for a React Native Android application using GitHub Actions.
 
-## Step 1: Start Metro
+The main paurpose of this project is to show how an Android build can be automated, how environment variables can be managed securely, and how the generated build could be distributed in a real-world scenario.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+**How the CI Pipeline Works**
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+The CI pipeline is implemented using GitHub Actions and is defined in the file: .github/workflows/ci.yml
 
-```sh
-# Using npm
-npm start
+# The pipeline is triggered automatically when:
 
-# OR using Yarn
-yarn start
-```
+- Code is pushed to the main branch
+- A pull request is opened against the main branch
 
-## Step 2: Build and run your app
+During execution, the pipeline performs the following actions:
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- Takes a look at the repository's source code
+- Gets Node.js ready to use.
+- Uses npm to install project requirements.
+- JDK 17 is set up for Android builds.
+- Sets up the Android SDK
+- Use Gradle to build the Android app.
+- Uploads the APK that was made as a build artifact
 
-### Android
+If all steps complete successfully, the workflow finishes with a usable Android APK.
 
-```sh
-# Using npm
-npm run android
 
-# OR using Yarn
-yarn android
-```
+# Environment Variable Management
 
-### iOS
+Environment variables are managed securely using GitHub Actions Secrets.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Instead of hardcoding configuration values in the source code, they are stored in the repository settings under GitHub Secrets. Like:
+- API_URL
+- APP_ENV
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+During the CI run, these secrets are injected at runtime and written into a temporary .env file. This file exists only during the workflow execution and is never committed to the repository. This Prevents sensitive configuration from being exposed, allows easy changes without modifying source code and supports multiple environments such as development and production.
 
-```sh
-bundle install
-```
+# Build Automation Steps
 
-Then, and every time you update your native dependencies, run:
+- The automated build process follows these steps:
+- Install Node.js dependencies using npm install
+- Prepare the Android build environment (Java and Android SDK)
+- Grant execution permission to the Gradle wrapper
+- Run the Gradle command to generate a debug APK
+- Store the APK as a GitHub actions artifact
 
-```sh
-bundle exec pod install
-```
+This confirms that the CI pipeline is able to produce a valid Android build automatically.
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+# Theoretical cloud deployment process
 
-```sh
-# Using npm
-npm run ios
+This project focuses on CI only. No actual deployment is performed.
 
-# OR using Yarn
-yarn ios
-```
+However, in a real production setup, the generated Android build could be distributed using one of the following approaches:
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+# Firebase App Distribution
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+The CI pipeline could authenticate using a Firebase service account and upload the APK or AAB to Firebase App Distribution. This allows internal testers to receive and test the app before release.
 
-## Step 3: Modify your app
+# Google Play Console Internal Testing
 
-Now that you have successfully run the app, let's make changes!
+Alternatively, the build could be uploaded to the Google Play Console using the Internal Testing track. This enables controlled testing with selected users and provides access to Play Store signing, analytics, and crash reporting.
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+These deployment steps are intentionally kept theoretical, as required by the task.
