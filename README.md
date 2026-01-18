@@ -8,10 +8,7 @@ The main paurpose of this project is to show how an Android build can be automat
 
 The CI pipeline is implemented using GitHub Actions and is defined in the file: .github/workflows/ci.yml
 
-# The pipeline is triggered automatically when:
-
-- Code is pushed to the main branch
-- A pull request is opened against the main branch
+# The pipeline is triggered automatically when code is pushed to the main branch and when a pull request is opened against the main branch
 
 During execution, the pipeline performs the following actions:
 
