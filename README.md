@@ -4,7 +4,7 @@ This repository demonstrates a simple Continuous Integration (CI) pipeline for a
 
 The main paurpose of this project is to show how an Android build can be automated, how environment variables can be managed securely, and how the generated build could be distributed in a real-world scenario.
 
-**How the CI Pipeline Works**
+How the CI Pipeline Works
 
 The CI pipeline is implemented using GitHub Actions and is defined in the file: .github/workflows/ci.yml
 
